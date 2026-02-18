@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card } from '../../components/ui/Card';
-import { Button } from '../../components/ui/Button';
-import { Input } from '../../components/ui/Input';
-import { useAuth, User, Department } from '../../context/AuthContext';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { useAuth, User, Department } from '@/context/AuthContext';
 
 export default function AdminPage() {
     const { user, users, updateUser, generateTempPassword } = useAuth();
