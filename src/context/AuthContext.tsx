@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 // --- FIXED: Added 'Admin' to the allowed departments ---
 export type Department = 'Finance' | 'Sales' | 'Procurement' | 'Product Owner' | 'Admin';
 
-type User = {
+export type User = {
     id: string;
     name: string;
     department: Department;
