@@ -1,49 +1,59 @@
-'use client';
-
 import { useRouter } from 'next/navigation';
-import { useCallback } from 'react';
-
-export const T_CODES = {
-    CREATE: 'ZPL01',
-    CHANGE: 'ZPL02',
-    DISPLAY: 'ZPL03',
-    DELETE: 'ZPL04',
-} as const;
-
-export type TCode = typeof T_CODES[keyof typeof T_CODES];
+import { useAuth } from '../context/AuthContext';
 
 export function useTCode() {
     const router = useRouter();
+    const { user } = useAuth();
 
-    const navigate = useCallback((code: string, params?: Record<string, string>) => {
-        const normalizedCode = code.toUpperCase().trim();
+    const navigate = (tcode: string) => {
+        const code = tcode.toUpperCase().trim();
 
-        let path = '';
-        switch (normalizedCode) {
-            case T_CODES.CREATE:
-                path = '/zpl01';
-                break;
-            case T_CODES.CHANGE:
-                path = '/zpl02';
-                break;
-            case T_CODES.DISPLAY:
-                path = '/zpl03';
-                break;
-            case T_CODES.DELETE:
-                path = '/zpl04';
-                break;
-            default:
-                console.warn(`Unknown T-Code: ${code}`);
+        if (!user) {
+            alert("Please log in first.");
+            router.push('/login');
+            return;
+        }
+
+        // --- SAP_ALL CHECK ---
+        // If user is Admin, they bypass the department restrictions completely.
+        if (user.department !== 'Admin') {
+
+            // Standard Logic for Normal Users
+            const allowedPrefixes: Record<string, string> = {
+                'Finance': 'ZFI',
+                'Sales': 'ZSL',
+                'Procurement': 'ZPR',
+                'Product Owner': 'ZOW'
+            };
+
+            const requiredPrefix = allowedPrefixes[user.department];
+
+            // If the department doesn't match the code prefix, Block Access.
+            if (!requiredPrefix || !code.startsWith(requiredPrefix)) {
+                alert(`⛔ Authorization Failed: You are not authorized to use transaction ${code}.`);
                 return;
+            }
         }
 
-        if (params) {
-            const query = new URLSearchParams(params).toString();
-            path += `?${query}`;
+        // --- Route Mapping ---
+        // Since Admin (SAP_ALL) passed the check above, they just need the route logic.
+        let targetRoute = '';
+
+        if (code.endsWith('01')) {
+            targetRoute = '/zpl01'; // Create
+        } else if (code.endsWith('02')) {
+            targetRoute = '/zpl02'; // Change
+        } else if (code.endsWith('03')) {
+            targetRoute = '/zpl03'; // Display
+        } else if (code.endsWith('04')) {
+            targetRoute = '/zpl04'; // Admin/Delete
+        } else {
+            alert("❌ T-Code not found.");
+            return;
         }
 
-        router.push(path);
-    }, [router]);
+        router.push(targetRoute);
+    };
 
     return { navigate };
 }

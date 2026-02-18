@@ -1,0 +1,92 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #EDEFF0;
+    /* SAP Fiori Background */
+    background-image: radial-gradient(#dce1e6 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.loginCard {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    border-top: 4px solid #0854A0;
+    /* SAP Blue Accent */
+}
+
+.title {
+    font-size: 1.75rem;
+    color: #354A5F;
+    margin-bottom: 0.5rem;
+    font-weight: normal;
+}
+
+.subtitle {
+    color: #6A6D70;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+}
+
+.inputGroup {
+    margin-bottom: 1.25rem;
+}
+
+.label {
+    display: block;
+    font-size: 0.85rem;
+    color: #5d6266;
+    margin-bottom: 0.5rem;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #89919A;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.input:focus {
+    border-color: #0854A0;
+    outline: 2px solid #EBF5FE;
+}
+
+.button {
+    width: 100%;
+    padding: 12px;
+    background-color: #0854A0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.button:hover {
+    background-color: #064079;
+}
+
+.errorMessage {
+    background-color: #ffebeb;
+    color: #bb0000;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid #ffcdcd;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #999;
+}

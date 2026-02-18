@@ -1,29 +1,41 @@
-import React from 'react';
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../context/AuthContext';
 
 export default function Home() {
+    const { user, isAuthenticated } = useAuth();
+    const router = useRouter();
+
+    useEffect(() => {
+        // If no user is logged in, redirect to login page immediately
+        if (!isAuthenticated) {
+            router.push('/login');
+        }
+    }, [isAuthenticated, router]);
+
+    // Prevent flashing the dashboard while checking
+    if (!isAuthenticated) {
+        return null;
+    }
+
+    // If logged in, show the Dashboard
     return (
-        <div className="container" style={{ padding: 'var(--spacing-xl) 0' }}>
-            <h1>MarginPlus</h1>
-            <p style={{ color: 'var(--text-secondary)', marginTop: 'var(--spacing-md)' }}>
-                Welcome to the MarginPlus Profitability Management System.
-            </p>
-            <div style={{
-                marginTop: 'var(--spacing-xl)',
-                padding: 'var(--spacing-lg)',
-                border: '1px solid var(--border-subtle)',
-                borderRadius: 'var(--radius-md)',
-                backgroundColor: 'var(--bg-secondary)'
-            }}>
-                <h2>Quick Start</h2>
-                <p style={{ marginTop: 'var(--spacing-sm)' }}>
-                    Use the Command Field (T-Code) to navigate.
-                </p>
-                <ul style={{ marginTop: 'var(--spacing-md)', paddingLeft: 'var(--spacing-lg)' }}>
-                    <li><strong>ZPL01</strong> - Create New Plan</li>
-                    <li><strong>ZPL02</strong> - Change Plan</li>
-                    <li><strong>ZPL03</strong> - Display Plan</li>
-                    <li><strong>ZPL04</strong> - Delete Plan</li>
-                </ul>
+        <div className="p-8 animate-fade-in">
+            <div className="fiori-card max-w-4xl mx-auto">
+                <h1 className="text-2xl mb-2 text-[#32363A]">MarginPlus Dashboard</h1>
+                <p className="text-gray-600 mb-8">Welcome back, <strong>{user?.name}</strong> ({user?.department})</p>
+
+                <div className="bg-blue-50 border-l-4 border-[#0854A0] p-4 rounded">
+                    <h2 className="font-bold text-[#354A5F] mb-2">Quick Actions</h2>
+                    <ul className="list-disc pl-5 space-y-1 text-sm text-gray-700">
+                        <li>Type <strong>{user?.department === 'Finance' ? 'ZFI01' : 'ZPL01'}</strong> to Create a New Plan</li>
+                        <li>Type <strong>ZPL02</strong> to Change an Existing Plan</li>
+                        <li>Type <strong>ZPL03</strong> to Display Analytics</li>
+                        {user?.department === 'Admin' && <li>Type <strong>ZAD01</strong> for User Administration</li>}
+                    </ul>
+                </div>
             </div>
         </div>
     );

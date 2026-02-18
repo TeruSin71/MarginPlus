@@ -58,7 +58,7 @@ export default function CreatePage() {
 
         // 3. Redirect or Show Success
         alert(`Plan created (ID: ${newId}) and Product Owner notified.`);
-        navigate('ZPL02', { id: newId });
+        navigate('ZFI02');
     };
 
     if (!canEditBase) {

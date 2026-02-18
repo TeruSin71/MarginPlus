@@ -1,0 +1,47 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.pageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 300;
+    /* Fiori Light Weight */
+    color: var(--text-primary);
+}
+
+.sectionTitle {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: var(--sap-primary-blue);
+    border-bottom: 2px solid var(--sap-accent-color);
+    padding-bottom: 0.25rem;
+    display: inline-block;
+}
+
+.kpiCard {
+    background-color: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    border: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+}
+
+.kpiLabel {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}

@@ -1,38 +1,70 @@
 :root {
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-serif: Georgia, Cambria, 'Times New Roman', Times, serif;
+  /* --- SAP Fiori 3 (Quartz Light) Source Variables --- */
+  --sap-shell-color: #354A5F;
+  /* The top header bar */
+  --sap-bg-color: #EDEFF0;
+  /* The main background gray */
+  --sap-card-bg: #FFFFFF;
+  /* White cards */
+  --sap-text-color: #32363A;
+  /* Dark gray text (not pure black) */
+  --sap-primary-blue: #0854A0;
+  /* Action buttons */
+  --sap-accent-color: #EBF5FE;
+  /* Light blue highlight */
+  --sap-border-color: #D9D9D9;
+  /* Subtle borders */
+  --sap-success: #107E3E;
+  /* Green for positive values */
+  --sap-error: #BB0000;
+  /* Red for errors */
+  --sap-font-family: "72", "Roboto", "Segoe UI", Arial, sans-serif;
 
-  /* Claude AI Dark Mode Inspired Palette */
-  --bg-primary: #191919;
-  --bg-secondary: #252525;
-  /* Surface/Cards */
-  --bg-tertiary: #2f2f2f;
-  /* Hover states */
+  /* --- Mapping to Existing Application Tokens --- */
 
-  --text-primary: #f0f0f0;
-  --text-secondary: #a0a0a0;
-  --text-tertiary: #666666;
+  /* Backgrounds */
+  --bg-primary: var(--sap-bg-color);
+  /* Page Background */
+  --bg-secondary: var(--sap-card-bg);
+  /* Card/Container Background */
+  --bg-tertiary: #F7F7F7;
+  /* Hover/Subtle Backgrounds */
 
-  --border-subtle: #333333;
-  --border-focus: #555555;
+  /* Text */
+  --text-primary: var(--sap-text-color);
+  --text-secondary: #6A6D70;
+  --text-tertiary: #89919A;
 
-  --accent-primary: #cc785c;
-  /* Warm terracotta/orange */
-  --accent-hover: #e0896d;
+  /* Borders */
+  --border-subtle: var(--sap-border-color);
+  --border-focus: var(--sap-primary-blue);
 
-  --status-error: #cf6679;
-  --status-success: #4caf50;
-  --status-warning: #ff9800;
+  /* Accents (Buttons/brand) */
+  --accent-primary: var(--sap-primary-blue);
+  --accent-hover: #06407a;
+  /* Darker blue */
 
+  /* Status */
+  --status-error: var(--sap-error);
+  --status-success: var(--sap-success);
+  --status-warning: #E9730C;
+  /* SAP Orange */
+
+  /* Spacing & Radius (Keep existing) */
   --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  --radius-md: 6px;
+  /* Fiori is slightly sharper */
+  --radius-lg: 8px;
 
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
+
+  /* Fonts */
+  --font-sans: var(--sap-font-family);
+  --font-serif: Georgia, Cambria, 'Times New Roman', Times, serif;
 }
 
 * {
@@ -41,7 +73,7 @@
   padding: 0;
 }
 
-/* Cross-Platform Scrollbar Styling */
+/* Cross-Platform Scrollbar Styling (Updated for Light Theme) */
 *::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -52,26 +84,19 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(--bg-tertiary);
+  background-color: #B0B0B0;
   border-radius: var(--radius-lg);
   border: 2px solid var(--bg-primary);
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background-color: var(--border-focus);
-}
-
-/* Firefox Scrollbar */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--bg-tertiary) var(--bg-primary);
+  background-color: #909090;
 }
 
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  /* System Font Stack for Windows/Mac Consistency */
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   display: flex;
@@ -79,8 +104,12 @@ body {
 }
 
 a {
-  color: inherit;
+  color: var(--sap-primary-blue);
   text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 h1,
@@ -89,13 +118,62 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-serif);
-  font-weight: 500;
+  font-family: var(--font-sans);
+  /* Fiori uses sans for headers too */
+  font-weight: 400;
+  /* Fiori uses lighter weights */
   color: var(--text-primary);
 }
 
 button {
   font-family: var(--font-sans);
+}
+
+/* --- SAP Fiori Utility Classes (User Provided) --- */
+
+/* Common Fiori Card Style */
+.fiori-card {
+  background: var(--sap-card-bg);
+  border-radius: 0.5rem;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  border: 1px solid var(--sap-border-color);
+}
+
+/* Fiori Inputs Global Overrides (Optional, if using standard tags) */
+input,
+select {
+  background: #FFFFFF;
+  border: 1px solid #89919A;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--sap-text-color);
+  font-family: var(--font-sans);
+  transition: border-color 0.2s;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--sap-primary-blue);
+  outline: 1px solid var(--sap-primary-blue);
+  /* Adjusted to match Fiori style */
+}
+
+/* Fiori Buttons */
+button.primary {
+  background-color: var(--sap-primary-blue);
+  color: white;
+  border: 1px solid var(--sap-primary-blue);
+  border-radius: 0.5rem;
+  font-weight: 600;
+}
+
+button.secondary {
+  background-color: transparent;
+  color: var(--sap-primary-blue);
+  border: 1px solid var(--sap-primary-blue);
+  border-radius: 0.5rem;
 }
 
 /* Utilities */
@@ -116,4 +194,155 @@ button {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+/* --- Added Utility Classes (Mimicking Tailwind via CSS) --- */
+.flex {
+  display: flex;
+}
+
+.b {
+  font-weight: bold;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
+.grid {
+  display: grid;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.w-full {
+  width: 100%;
+}
+
+.block {
+  display: block;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+}
+
+.text-gray-500 {
+  color: #6b7280;
+}
+
+.text-green-600 {
+  color: var(--sap-success);
+}
+
+.text-orange-600 {
+  color: var(--status-warning);
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-mono {
+  font-family: monospace;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.rounded {
+  border-radius: var(--radius-sm);
+}
+
+.rounded-lg {
+  border-radius: var(--radius-lg);
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.bg-gray-100 {
+  background-color: #f3f4f6;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }

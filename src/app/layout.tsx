@@ -1,34 +1,29 @@
-import type { Metadata } from 'next';
-import './globals.css';
-import React from 'react';
+'use client';
+
+import { usePathname } from 'next/navigation';
 import { AuthProvider } from '../context/AuthContext';
 import { DataProvider } from '../context/DataContext';
 import CommandBar from '../components/CommandBar';
 import { PasswordResetModal } from '../components/auth/PasswordResetModal';
+import './globals.css';
 
-export const metadata = {
-    title: 'MarginPlus',
-    description: 'Profitability Management',
-};
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+    const pathname = usePathname();
 
-export default function RootLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+    // Don't show Command Bar on the login page
+    const showCommandBar = pathname !== '/login';
+
     return (
         <html lang="en">
             <body>
                 <AuthProvider>
                     <DataProvider>
-                        <div className="app-shell">
-                            <CommandBar />
-                            <main className="main-content">
-                                {children}
-                            </main>
-                            {/* Security Intercept */}
-                            <PasswordResetModal />
-                        </div>
+                        {showCommandBar && <CommandBar />}
+                        <main>
+                            {children}
+                        </main>
+                        {/* Security Intercept */}
+                        <PasswordResetModal />
                     </DataProvider>
                 </AuthProvider>
             </body>

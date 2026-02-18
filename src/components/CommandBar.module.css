@@ -1,59 +1,65 @@
 .header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: 0 var(--spacing-md);
+    align-items: center;
+    padding: 0 2rem;
     height: 48px;
-    background-color: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-subtle);
+    /* Standard Fiori Shell Height */
+    background-color: var(--sap-shell-color);
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     position: sticky;
     top: 0;
     z-index: 100;
 }
 
 .logo {
-    font-weight: 600;
     font-size: 1.1rem;
-    color: var(--text-primary);
-    margin-right: var(--spacing-lg);
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    letter-spacing: 0.5px;
 }
 
-.commandField {
-    flex: 1;
-    max-width: 300px;
-    position: relative;
-}
-
+/* The T-Code Input mimicking the Enterprise Search */
 .input {
-    width: 100%;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    background-color: var(--bg-primary);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-sm);
-    color: var(--text-primary);
-    font-family: monospace;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 4px;
+    padding: 6px 12px;
+    width: 300px;
     font-size: 0.9rem;
 }
 
+.input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
 .input:focus {
+    background: white;
+    color: #32363A;
+    border-color: white;
     outline: none;
-    border-color: var(--accent-primary);
 }
 
 .userInfo {
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
+    gap: 1rem;
     font-size: 0.9rem;
-    color: var(--text-secondary);
 }
 
+/* Role Switcher looking like a User Menu */
 .roleSwitcher {
     background: transparent;
-    border: 1px solid var(--border-subtle);
-    color: var(--text-secondary);
-    padding: 2px 6px;
-    border-radius: var(--radius-sm);
+    color: white;
+    border: none;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 0.8rem;
+}
+
+.roleSwitcher option {
+    background-color: white;
+    color: #32363A;
 }

@@ -1,104 +1,191 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { Card } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { useAuth } from '@/context/AuthContext';
-import { useData } from '@/context/DataContext';
-import { useTCode } from '@/hooks/useTCode';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import styles from './zpl02.module.css';
 
-function Zpl02Content() {
-  const { user } = useAuth();
-  const { getScenario, updateScenario, cloneScenario, submitPurchasing, confirmCOGS, finalizeSales } = useData();
-  const searchParams = useSearchParams();
-  const { navigate } = useTCode();
+// --- Types ---
+type Scenario = {
+    id: string;
+    name: string;
+    description: string;
+    cogs: {
+        material: number;
+        labor: number;
+        overhead: number;
+    };
+};
 
-  const id = searchParams.get('id');
-  const [formData, setFormData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+export default function ScenarioManager() {
+    const { user } = useAuth();
 
-  // Clone State
-  const [showCloneModal, setShowCloneModal] = useState(false);
-  const [cloneName, setCloneName] = useState('');
+    // --- State ---
+    const [selectedScenario, setSelectedScenario] = useState<Scenario | null>(null);
+    const [isSimulating, setIsSimulating] = useState(false);
 
-  // Load Data
-  useEffect(() => {
-    if (id) {
-      const scenario = getScenario(id);
-      if (scenario) {
-        setFormData(scenario);
-      } else {
-        alert('Scenario not found');
-      }
-    }
-    setLoading(false);
-  }, [id, getScenario]);
+    // Dummy Initial Data (Replace with DB fetch later)
+    const [scenarios, setScenarios] = useState<Scenario[]>([
+        {
+            id: '1',
+            name: 'Base Case 2026',
+            description: 'Standard operating costs',
+            cogs: { material: 450, labor: 120, overhead: 80 }
+        },
+        {
+            id: '2',
+            name: 'Optimistic Q3',
+            description: 'Reduced material costs by 10%',
+            cogs: { material: 405, labor: 120, overhead: 80 }
+        }
+    ]);
 
-  // RBAC Logic
-  const isFinance = user?.department === 'Finance';
-  const isSales = user?.department === 'Sales';
-  const isPO = user?.department === 'Product Owner';
-  const isPurchasing = user?.department === 'Purchasing';
+    // Set default scenario on load
+    useEffect(() => {
+        if (scenarios.length > 0 && !selectedScenario) {
+            setSelectedScenario(scenarios[0]);
+        }
+    }, [scenarios, selectedScenario]);
 
-  const canEditBase = isFinance && formData?.status === 'Draft';
-  const canEditPrice = isSales && formData?.status === 'Sales_Analysis';
+    // --- Handlers ---
+    const handleSave = () => {
+        alert(`Saved changes to ${selectedScenario?.name}`);
+    };
 
-  // Workflow Actions
-  const handleSave = () => {
-    if (!id || !formData) return;
-    updateScenario(id, formData);
+    const handleClone = () => {
+        if (!selectedScenario) return;
+        const newScenario = {
+            ...selectedScenario,
+            id: Math.random().toString(),
+            name: `${selectedScenario.name} (Copy)`,
+        };
+        setScenarios([...scenarios, newScenario]);
+        setSelectedScenario(newScenario);
+    };
 
-    // Workflow Triggers
-    if (isPO && formData.status === 'PD_Review') {
-      confirmCOGS(id);
-      alert('COGS confirmed. Notifying Purchasing.');
-    } else if (isPurchasing && formData.status === 'Purchasing_Action') {
-      submitPurchasing(id, '1200.00'); // Logic simplified for prototype
-      alert('Purchasing complete. Notifying Sales & Finance.');
-    } else if (isSales && formData.status === 'Sales_Analysis') {
-      finalizeSales(id, formData.targetSellingPrice);
-      alert('Sales Analysis Complete. Scenario Finalized.');
-    } else {
-      alert('Changes saved.');
-    }
-  };
+    const updateCogs = (field: keyof Scenario['cogs'], value: string) => {
+        if (!selectedScenario) return;
+        const numValue = parseFloat(value) || 0;
+        setSelectedScenario({
+            ...selectedScenario,
+            cogs: { ...selectedScenario.cogs, [field]: numValue }
+        });
+    };
 
-  if (loading) return <div>Loading...</div>;
-  if (!formData) return <div>Scenario not found.</div>;
+    // --- Permission Check ---
+    const hasEditAccess = ['Finance', 'Product Owner'].includes(user?.department || '');
 
-  return (
-    <div className="p-8">
-      <Card className="p-6 max-w-4xl mx-auto">
-        <h1 className="text-2xl font-bold mb-4">Change Scenario: {formData.name}</h1>
-        <div className="space-y-4">
-          <Input 
-            label="Scenario Name" 
-            value={formData.name} 
-            onChange={(e) => setFormData({...formData, name: e.target.value})}
-            disabled={!canEditBase}
-          />
-          <Input 
-            label="Description" 
-            value={formData.description} 
-            onChange={(e) => setFormData({...formData, description: e.target.value})}
-            disabled={!canEditBase}
-          />
-           <div className="flex gap-4 mt-6">
-            <Button onClick={handleSave}>Save Changes</Button>
-            <Button variant="secondary" onClick={() => setShowCloneModal(true)}>Clone Scenario</Button>
-          </div>
+    return (
+        <div className={styles.container}>
+            <header className={styles.pageHeader}>
+                <h1 className={styles.title}>Change Scenario: {selectedScenario?.name}</h1>
+                <div className="flex gap-2">
+                    <button onClick={handleSave} disabled={!hasEditAccess} className="primary px-4 py-2">Save</button>
+                    <button onClick={handleClone} className="secondary px-4 py-2">Clone</button>
+                </div>
+            </header>
+
+            {/* Object Header / Filter Bar */}
+            <div className="fiori-card mb-6">
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-sm text-gray-500 mb-1">Scenario ID</label>
+                        <select
+                            className="w-full"
+                            value={selectedScenario?.id || ''}
+                            onChange={(e) => {
+                                const scen = scenarios.find(s => s.id === e.target.value);
+                                setSelectedScenario(scen || null);
+                            }}
+                        >
+                            {scenarios.map(s => (
+                                <option key={s.id} value={s.id}>{s.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-sm text-gray-500 mb-1">Description</label>
+                        <input
+                            className="w-full"
+                            value={selectedScenario?.description || ''}
+                            onChange={(e) => selectedScenario && setSelectedScenario({ ...selectedScenario, description: e.target.value })}
+                            disabled={!hasEditAccess}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            {/* COGS Table Section */}
+            {hasEditAccess ? (
+                <div className="fiori-card">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className={styles.sectionTitle}>COGS Breakdown</h3>
+
+                        {/* Simulation Toggle */}
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => setIsSimulating(!isSimulating)}
+                                className={`px-4 py-2 text-sm rounded ${isSimulating ? 'primary' : 'secondary'}`}
+                            >
+                                {isSimulating ? 'Stop Simulation' : 'Simulate'}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-4">
+                        {/* Material Cost */}
+                        <div className={styles.kpiCard}>
+                            <div className={styles.kpiLabel}>Material Cost</div>
+                            <input
+                                type="number"
+                                className="w-full"
+                                value={selectedScenario?.cogs.material || 0}
+                                onChange={(e) => updateCogs('material', e.target.value)}
+                                disabled={isSimulating}
+                            />
+                        </div>
+
+                        {/* Labor Cost */}
+                        <div className={styles.kpiCard}>
+                            <div className={styles.kpiLabel}>Labor Cost</div>
+                            <input
+                                type="number"
+                                className="w-full"
+                                value={selectedScenario?.cogs.labor || 0}
+                                onChange={(e) => updateCogs('labor', e.target.value)}
+                                disabled={isSimulating}
+                            />
+                        </div>
+
+                        {/* Overhead Cost */}
+                        <div className={styles.kpiCard}>
+                            <div className={styles.kpiLabel}>Overhead</div>
+                            <input
+                                type="number"
+                                className="w-full"
+                                value={selectedScenario?.cogs.overhead || 0}
+                                onChange={(e) => updateCogs('overhead', e.target.value)}
+                                disabled={isSimulating}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Total Calculation Display */}
+                    <div className="mt-6 p-4 bg-gray-100 rounded flex justify-between items-center">
+                        <span className="font-bold text-lg">Total COGS:</span>
+                        <span className="font-mono text-xl text-green-600">
+                            $
+                            {((selectedScenario?.cogs.material || 0) +
+                                (selectedScenario?.cogs.labor || 0) +
+                                (selectedScenario?.cogs.overhead || 0)).toFixed(2)}
+                        </span>
+                    </div>
+                </div>
+            ) : (
+                <div className="fiori-card p-6 text-center text-gray-500">
+                    <h2 className="text-xl font-bold mb-2">View Only Access</h2>
+                    <p>Your department ({user?.department}) does not have permission to edit COGS details.</p>
+                </div>
+            )}
         </div>
-      </Card>
-    </div>
-  );
-}
-
-export default function Page() {
-  return (
-    <Suspense fallback={<div>Loading Page...</div>}>
-      <Zpl02Content />
-    </Suspense>
-  );
+    );
 }

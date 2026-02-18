@@ -129,7 +129,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
         updateScenario(id, { status: 'Purchasing_Action', cogsConfirmed: true });
         sendEmail(
-            'Purchasing',
+            'Procurement',
             `Action Required: Costing for ${s.productId}`,
             `Product Owner confirmed components for ${s.scenarioName}. Please provide purchasing data.`,
             { id: s.id, productId: s.productId }
