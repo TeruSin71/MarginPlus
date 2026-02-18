@@ -1,4 +1,3 @@
-// forcing update to fix user name error
 'use client';
 
 import React, { useState } from 'react';
@@ -42,8 +41,7 @@ export default function CommandBar() {
       </form>
 
       <div className={styles.userInfo}>
-        {/* Fixed: Using department instead of name to satisfy TypeScript */}
-        <span>{user?.department || 'User'}</span>
+        <span>{user ? `${user.firstName} ${user.lastName}` : 'Guest'}</span>
         <select
           className={styles.roleSwitcher}
           value={user?.department || 'Finance'}
