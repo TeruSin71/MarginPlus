@@ -1,12 +1,13 @@
+// Force Update: Adding Admin Role
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-// --- FIXED: Added 'Admin' to the allowed departments ---
+// --- CRITICAL FIX: 'Admin' must be in this list ---
 export type Department = 'Finance' | 'Sales' | 'Procurement' | 'Product Owner' | 'Admin';
 
-export type User = {
+type User = {
     id: string;
     name: string;
     department: Department;
