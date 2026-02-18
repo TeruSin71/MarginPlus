@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Card } from '@/components/ui/Card';
-import { Input } from '@/components/ui/Input';
-import { Button } from '@/components/ui/Button';
-import { useData } from '@/context/DataContext';
-import { useAuth } from '@/context/AuthContext';
+import { Card } from '../../components/ui/Card';
+import { Input } from '../../components/ui/Input';
+import { Button } from '../../components/ui/Button';
+import { useData } from '../../context/DataContext';
+import { useAuth } from '../../context/AuthContext';
 
 export default function DisplayPage() {
     const { getScenario } = useData();

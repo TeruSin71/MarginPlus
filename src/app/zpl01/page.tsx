@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { ProgressBar } from '@/components/ui/ProgressBar';
-import { useAuth } from '@/context/AuthContext';
-import { useData } from '@/context/DataContext';
-import { useTCode } from '@/hooks/useTCode';
+import { Card } from '../../components/ui/Card';
+import { Button } from '../../components/ui/Button';
+import { Input } from '../../components/ui/Input';
+import { ProgressBar } from '../../components/ui/ProgressBar';
+import { useAuth } from '../../context/AuthContext';
+import { useData } from '../../context/DataContext';
+import { useTCode } from '../../hooks/useTCode';
 
 export default function CreatePage() {
     const { user } = useAuth();
