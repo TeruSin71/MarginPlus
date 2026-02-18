@@ -3,7 +3,7 @@ import './globals.css';
 import React from 'react';
 import { AuthProvider } from '../context/AuthContext';
 import { DataProvider } from '../context/DataContext';
-import { CommandBar } from '../components/CommandBar';
+import CommandBar from '../components/CommandBar';
 import { PasswordResetModal } from '../components/auth/PasswordResetModal';
 
 export const metadata = {
