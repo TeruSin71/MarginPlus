@@ -3,9 +3,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
+// --- FIXED: Added 'Admin' to the allowed departments ---
 export type Department = 'Finance' | 'Sales' | 'Procurement' | 'Product Owner' | 'Admin';
 
-export type User = {
+type User = {
     id: string;
     name: string;
     department: Department;
@@ -24,10 +25,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const router = useRouter();
 
-    // Optional: Restore session from localStorage on load
+    // Restore session from localStorage on load
     useEffect(() => {
         const stored = localStorage.getItem('zpl_user');
-        if (stored) setUser(JSON.parse(stored));
+        if (stored) {
+            try {
+                setUser(JSON.parse(stored));
+            } catch (e) {
+                console.error("Failed to parse user session", e);
+                localStorage.removeItem('zpl_user');
+            }
+        }
     }, []);
 
     const login = (userData: User) => {
